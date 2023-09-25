@@ -19,6 +19,7 @@
     "semiColons": false
   },
   "tasks": {
-    "test": "deno test -A"
+    "test": "deno test -A -- --nodb=true",
+    "test-all": "deno test -A -- --nodb=false"
   }
 }
