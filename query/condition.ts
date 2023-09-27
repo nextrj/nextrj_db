@@ -71,7 +71,13 @@ export type ObjectStringCondition = {
   /** Default {@link Operator.EQ} */
   operator?: Operator
 }
-/** String value representation condition */
+/**
+ * String value representation condition.
+ * - [0] - name
+ * - [1] - value
+ * - [2] - valueType
+ * - [3] - operator
+ */
 export type ArrayStringCondition = [
   string,
   string | string[] | undefined | null,
