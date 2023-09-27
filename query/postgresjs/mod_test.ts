@@ -1,6 +1,9 @@
-import { assertEquals, parseArgs, postgres } from '../deps.ts'
-import { dollarWrappedParamMarker, Operator, toConditionQueryTemplate } from '../mod.ts'
-import { toQuery } from './mod.ts'
+import { assertEquals, parseArgs, postgres } from '../../deps.ts'
+import parseCondition, { Condition, Operator, parseSearchCondition, StringCondition } from '../condition.ts'
+import { DOLLAR_WRAPPED_PARAM_MARKER } from '../param_marker.ts'
+import parseQueryTemplate from '../template.ts'
+import { QueryTemplate } from '../template.ts'
+import createPartialQuery from './mod.ts'
 async function beforeEach() {
   await initDb()
 }
@@ -42,19 +45,22 @@ async function cleanDb() {
 // whether to ignore real database connect test
 const ignore = parseArgs(Deno.args, { default: { 'nodb': false }, boolean: 'nodb' })['nodb']
 
-Deno.test('toQuery - condition', { ignore }, async () => {
+Deno.test('createPartialQuery', { ignore }, async () => {
   await beforeEach()
 
   const sql = getSql()
   const columns = ['t.c1', 't.c2']
-  const queryTemplate = toConditionQueryTemplate(['t.c1', ['v1', 'v2'], 'string', Operator.IN], {
-    paramMarker: dollarWrappedParamMarker,
-  })
-
+  const conds: Condition[] = [
+    ['t.c1', 'v1', , ,] as StringCondition,
+    ['t.c2', ['v1', 'v2'], 'string', Operator.IN] as StringCondition,
+  ].map((c) => parseCondition(c))
+  conds.push(parseSearchCondition('v1', columns))
+  const tpl: QueryTemplate = parseQueryTemplate(conds, { paramMarker: DOLLAR_WRAPPED_PARAM_MARKER })
+  // console.log(JSON.stringify(tpl, null, 2))
   const r = await sql`
       select ${sql(columns)}
       from t1 as t
-      where ${toQuery(sql, queryTemplate)}
+      where ${createPartialQuery(sql, tpl)}
       order by t.c1 desc
     `
   // console.log(r.statement)
