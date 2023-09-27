@@ -1,5 +1,9 @@
 # nextrj_db changelog
 
+## 0.3.0 2023-09-27
+
+- Add convenient method for convert string-condition to partial-query
+
 ## 0.2.0 2023-09-27
 
 - Complete reconstruction
