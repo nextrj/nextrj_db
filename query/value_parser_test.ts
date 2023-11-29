@@ -1,7 +1,16 @@
-import { assertEquals } from '../deps.ts'
+import { assertEquals, assertStrictEquals } from '../deps.ts'
 import { DEFAULT_VALUE_PARSER } from './value_parser.ts'
 
 Deno.test('DEFAULT_VALUE_PARSER', async (t) => {
+  await t.step('empty string', () => {
+    assertStrictEquals(DEFAULT_VALUE_PARSER('', 'string'), '')
+  })
+  await t.step('undefined', () => {
+    assertStrictEquals(DEFAULT_VALUE_PARSER(undefined, 'string'), undefined)
+  })
+  await t.step('null', () => {
+    assertStrictEquals(DEFAULT_VALUE_PARSER(null, 'string'), null)
+  })
   await t.step('string', () => {
     assertEquals(DEFAULT_VALUE_PARSER('abc', 'string'), 'abc')
   })

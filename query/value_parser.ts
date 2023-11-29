@@ -1,5 +1,5 @@
 /** Parse a string representation value to the specific type value */
-export type ValueParser = (value: string, type?: string) => unknown
+export type ValueParser = (value: string | undefined | null, type?: string) => unknown
 
 /**
  * Default value parser.
@@ -12,8 +12,8 @@ export type ValueParser = (value: string, type?: string) => unknown
  * - number, double，money - Parse string to number by `new Number(any)` method
  * - string - The default type, return the original string value
  */
-export const DEFAULT_VALUE_PARSER: ValueParser = (value: string, type = 'string') => {
-  if (value === '') return undefined
+export const DEFAULT_VALUE_PARSER: ValueParser = (value: string | undefined | null, type = 'string') => {
+  if (value === '' || value === undefined || value === null) return value
   switch (type) {
     case 'boolean':
       return !['0', 'false', 'f', 'F', 'FALSE'].includes(value)
