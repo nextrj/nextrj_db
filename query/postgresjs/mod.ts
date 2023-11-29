@@ -25,8 +25,8 @@ import { DEFAULT_VALUE_PARSER, ValueParser } from '../value_parser.ts'
  *
  * The upper example do the same bellow things:
  *
- * ```ts
- * const partialQuery = (age1, age2) => sql`age > ${age1} and age < ${ag2}`
+ * ```js
+ * const partialQuery = (age1, age2) => sql`age > ${age1} and age < ${age2}`
  * const users = await sql`select * from user where name = 'x' and ${partialQuery(10, 20)}`
  * ```
  */
