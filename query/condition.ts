@@ -87,7 +87,7 @@ export type ArrayStringCondition = [
 /** String value representation condition */
 export type StringCondition = ObjectStringCondition | ArrayStringCondition
 
-/** Parse a {@link ObjectStringCondition}  to a {@link RawCondition} */
+/** Parse a {@link StringCondition}  to a {@link RawCondition} */
 export default function parseStringCondition(
   condition: StringCondition,
   options: { valueParser?: ValueParser } = {},
