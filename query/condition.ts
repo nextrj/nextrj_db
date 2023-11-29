@@ -65,7 +65,7 @@ export function or(cond: Condition, ...conds: Condition[]): CombinedCondition {
 /** String value representation condition */
 export type ObjectStringCondition = {
   name: string
-  value?: string | string[] | null
+  value?: string | (string | undefined | null)[] | undefined | null
   /** Default 'string' */
   valueType?: string
   /** Default {@link Operator.EQ} */
@@ -80,7 +80,7 @@ export type ObjectStringCondition = {
  */
 export type ArrayStringCondition = [
   string,
-  string | string[] | undefined | null,
+  string | (string | undefined | null)[] | undefined | null,
   string | undefined,
   Operator | undefined,
 ]
@@ -96,15 +96,28 @@ export default function parseStringCondition(
   const cond: ObjectStringCondition = Array.isArray(condition)
     ? { name: condition[0], value: condition[1], valueType: condition[2], operator: condition[3] }
     : condition
-  return {
+
+  // use for to iterator array item because Array.map|forEach sure to ignore empty item
+  let value
+  if (Array.isArray(cond.value)) {
+    value = []
+    for (const v of cond.value) value.push(valueParser(v, cond.valueType || 'string'))
+  } else {
+    value = valueParser(cond.value, cond.valueType || 'string')
+  }
+
+  const raw = {
     name: cond.name,
     operator: cond.operator || Operator.EQ,
-    value: Array.isArray(cond.value)
-      ? cond.value.map((v) => valueParser(v, cond.valueType || 'string'))
-      : cond.value !== undefined && cond.value !== null
-      ? valueParser(cond.value as string, cond.valueType || 'string')
-      : cond.value,
+    value: value,
   }
+
+  // auto filter null or undefined value for in operator
+  if ((raw.operator === Operator.IN || raw.operator === Operator.NOT_IN) && Array.isArray(raw.value)) {
+    raw.value = raw.value.filter((v) => v !== undefined && v !== null)
+  }
+
+  return raw
 }
 
 /**

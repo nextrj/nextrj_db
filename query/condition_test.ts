@@ -80,6 +80,10 @@ Deno.test('parse array string condition', async (t) => {
     const cond: ArrayStringCondition = ['c1', null, undefined, Operator.EQ]
     assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.EQ, value: null })
   })
+  await t.step('empty string value', () => {
+    const cond: ArrayStringCondition = ['c1', '', undefined, Operator.EQ]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.EQ, value: '' })
+  })
   await t.step('string', () => {
     const cond: ArrayStringCondition = ['c1', 'v1', 'string', Operator.EQ]
     assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.EQ, value: 'v1' })
@@ -104,13 +108,53 @@ Deno.test('parse array string condition', async (t) => {
     const cond: ArrayStringCondition = ['c1', '0', 'boolean', Operator.EQ]
     assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.EQ, value: false })
   })
-  await t.step('in int[]', () => {
+  await t.step('in int["1"]', () => {
+    const cond: ArrayStringCondition = ['c1', ['1'], 'int', Operator.IN]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [1] })
+  })
+  await t.step('in int["1", "2"]', () => {
     const cond: ArrayStringCondition = ['c1', ['1', '2'], 'int', Operator.IN]
     assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [1, 2] })
   })
-  await t.step('range int[]', () => {
+  await t.step('in int["1", null]', () => {
+    const cond: ArrayStringCondition = ['c1', ['1', null], 'int', Operator.IN]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [1] })
+  })
+  await t.step('in int["1", undefined]', () => {
+    const cond: ArrayStringCondition = ['c1', ['1', undefined], 'int', Operator.IN]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [1] })
+  })
+  await t.step('in int["1",]', () => {
+    const cond: ArrayStringCondition = ['c1', ['1', undefined], 'int', Operator.IN]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [1] })
+  })
+  await t.step('in int[undefined, "2"]', () => {
+    const cond: ArrayStringCondition = ['c1', [, '2'], 'int', Operator.IN]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [2] })
+  })
+  await t.step('in int[null, "2"]', () => {
+    const cond: ArrayStringCondition = ['c1', [, '2'], 'int', Operator.IN]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [2] })
+  })
+  await t.step('in int[, "2"]', () => {
+    const cond: ArrayStringCondition = ['c1', [, '2'], 'int', Operator.IN]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.IN, value: [2] })
+  })
+  await t.step('range int["1", "2"]', () => {
     const cond: ArrayStringCondition = ['c1', ['1', '2'], 'int', Operator.RANGE_GT_LT]
     assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.RANGE_GT_LT, value: [1, 2] })
+  })
+  await t.step('range int[null, "2"]', () => {
+    const cond: ArrayStringCondition = ['c1', [null, '2'], 'int', Operator.RANGE_GT_LT]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.RANGE_GT_LT, value: [null, 2] })
+  })
+  await t.step('range int[undefined, "2"]', () => {
+    const cond: ArrayStringCondition = ['c1', [undefined, '2'], 'int', Operator.RANGE_GT_LT]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.RANGE_GT_LT, value: [undefined, 2] })
+  })
+  await t.step('range int[, "2"]', () => {
+    const cond: ArrayStringCondition = ['c1', [, '2'], 'int', Operator.RANGE_GT_LT]
+    assertEquals(parseStringCondition(cond), { name: 'c1', operator: Operator.RANGE_GT_LT, value: [undefined, 2] })
   })
 })
 

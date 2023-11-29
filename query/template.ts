@@ -53,8 +53,8 @@ function parseRawCondition(
     operator === Operator.RANGE_GT_EQ || operator === Operator.RANGE_GT_LT
   ) {
     const values = value as unknown[]
-    const has0 = values[0] !== undefined && values[0] !== null
-    const has1 = values[1] !== undefined && values[1] !== null
+    const has0 = values[0] !== undefined && values[0] !== null && values[0] !== ''
+    const has1 = values[1] !== undefined && values[1] !== null && values[1] !== ''
     const both = has0 && has1
     const contens: string[] = []
     if (has0) {
