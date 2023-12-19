@@ -1,5 +1,10 @@
 # nextrj_db changelog
 
+## 0.5.0 2023-12-19
+
+- Upgrade to deno/x/postgresjs@v3.4.3
+- Upgrade to deno/std@0.209.0
+
 ## 0.4.0 2023-11-29
 
 - Make ValueParser can parse undefined, null or empty value
