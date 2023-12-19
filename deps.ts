@@ -14,7 +14,7 @@ export {
 export { parse as parseArgs } from 'https://deno.land/std@0.209.0/flags/mod.ts'
 
 // deno/x
-export { default as postgres } from 'https://deno.land/x/postgresjs@v3.3.5/mod.js'
+export { default as postgres } from 'https://deno.land/x/postgresjs@v3.4.3/mod.js'
 
 // npm
 
