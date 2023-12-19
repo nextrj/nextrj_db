@@ -11,7 +11,7 @@ export {
   assertStrictEquals,
   assertThrows,
 } from 'https://deno.land/std@0.209.0/assert/mod.ts'
-export { parse as parseArgs } from 'https://deno.land/std@0.209.0/flags/mod.ts'
+export { parseArgs } from 'https://deno.land/std@0.209.0/cli/parse_args.ts'
 
 // deno/x
 export { default as postgres } from 'https://deno.land/x/postgresjs@v3.4.3/mod.js'
