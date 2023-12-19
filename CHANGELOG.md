@@ -1,5 +1,9 @@
 # nextrj_db changelog
 
+## 0.5.1 2023-12-19
+
+- Use `std@0.209.0/cli/parse_args.ts>parseArgs` instead of `std@0.209.0/flags/mod.ts>parse`
+
 ## 0.5.0 2023-12-19
 
 - Upgrade to deno/x/postgresjs@v3.4.3
